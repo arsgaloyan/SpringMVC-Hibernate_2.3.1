@@ -1,6 +1,5 @@
 package ru.galoyan.spring.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -33,7 +32,6 @@ public class SpringConfig implements WebMvcConfigurer {
     private final ApplicationContext applicationContext;
     private final Environment environment;
 
-    @Autowired
     public SpringConfig(ApplicationContext applicationContext, Environment environment) {
         this.applicationContext = applicationContext;
         this.environment = environment;
@@ -77,10 +75,12 @@ public class SpringConfig implements WebMvcConfigurer {
         return dataSource;
     }
 
-    private Properties hibernateProperties() {
+    Properties hibernateProperties() {
         Properties properties = new Properties();
-        properties.put("hibernate.dialect", environment.getRequiredProperty("hibernate.dialect"));
-        properties.put("hibernate.show_sql", environment.getRequiredProperty("hibernate.show_sql"));
+
+        properties.put("hibernate.properties", "hibernate.show_sql");
+        properties.setProperty("hibernate.hbm2ddl.auto", "create-drop");
+        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
 
         return properties;
     }
